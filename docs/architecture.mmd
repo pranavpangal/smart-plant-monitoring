@@ -1,0 +1,14 @@
+flowchart TD
+    P[Low-voltage power] --> MCU[ESP32 DevKit]
+    SOIL[Capacitive soil moisture sensor] -->|Analog signal| MCU
+    DHT[DHT22 temperature and humidity] -->|Digital signal| MCU
+    MCU --> READ[Read and validate sensors]
+    READ --> CTRL[Watering control logic]
+    CTRL --> CHECK{Moisture below threshold<br/>and cooldown complete?}
+    CHECK -->|Yes| DRIVER[Relay or MOSFET driver]
+    DRIVER --> PUMP[Low-voltage DC pump]
+    PUMP --> PLANT[Plant / soil]
+    CHECK -->|No| WAIT[Continue monitoring]
+    MCU <-->|Wi-Fi / HTTP| WEB[ESP32 web server]
+    WEB --> UI[Browser dashboard]
+    UI -->|Manual ON / OFF| WEB
